@@ -1,0 +1,7 @@
+rootProject.name = 'bdd-pact-microservices'
+include 'ng-frontend'
+include 'api-gateway'
+include 'product-catalog-service'
+include 'offers-service'
+rootProject.name = 'bdd-pact-microservices'
+
