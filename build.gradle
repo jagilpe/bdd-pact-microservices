@@ -1,3 +1,17 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    jcenter()
+  }
+  dependencies {
+    classpath('com.bmuschko:gradle-docker-plugin:3.2.1')
+    classpath('com.avast.gradle:gradle-docker-compose-plugin:0.6.9')
+  }
+}
+
+apply plugin: 'com.bmuschko.docker-remote-api'
+apply plugin: 'docker-compose'
+
 group 'com.gilpereda.blog'
 version '0.1-SNAPSHOT'
 
@@ -5,3 +19,14 @@ task wrapper(type: Wrapper) {
   gradleVersion = '4.3.1'
 }
 
+import com.bmuschko.gradle.docker.tasks.DockerInfo
+
+task checkDockerIsAvailable(type: DockerInfo)
+
+dockerCompose {
+  pactBroker {
+    useComposeFiles = ['docker-compose/pact-broker-compose.yml']
+  }
+}
+
+pactBrokerComposeUp.dependsOn checkDockerIsAvailable
