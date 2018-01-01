@@ -1,2 +1,2 @@
 rootProject.name = 'bdd-pact-microservices'
-
+include 'ng-frontend'

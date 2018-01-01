@@ -4,16 +4,32 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath('com.bmuschko:gradle-docker-plugin:3.2.1')
     classpath('com.avast.gradle:gradle-docker-compose-plugin:0.6.9')
+    classpath('com.bmuschko:gradle-docker-plugin:3.2.1')
   }
 }
 
-apply plugin: 'com.bmuschko.docker-remote-api'
 apply plugin: 'docker-compose'
+apply plugin: 'com.bmuschko.docker-remote-api'
 
-group 'com.gilpereda.blog'
-version '0.1-SNAPSHOT'
+allprojects {
+  group 'com.gilpereda.blog.bdd-pact-microservices'
+  version '0.1-SNAPSHOT'
+}
+
+subprojects {
+  buildscript {
+    repositories {
+      mavenCentral()
+      jcenter()
+    }
+    dependencies {
+      classpath('com.bmuschko:gradle-docker-plugin:3.2.1')
+    }
+  }
+
+  apply plugin: 'com.bmuschko.docker-remote-api'
+}
 
 task wrapper(type: Wrapper) {
   gradleVersion = '4.3.1'
@@ -30,3 +46,4 @@ dockerCompose {
 }
 
 pactBrokerComposeUp.dependsOn checkDockerIsAvailable
+
