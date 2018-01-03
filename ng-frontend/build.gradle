@@ -1,37 +1,37 @@
 plugins {
-  id "au.com.dius.pact" version "3.2.13"
-  id "com.moowork.node" version "1.2.0"
+    id "au.com.dius.pact" version "3.2.13"
+    id "com.moowork.node" version "1.2.0"
 }
 
 apply plugin: 'base'
 
 node {
-  version = '8.9.2'
-  npmVersion = '5.5.1'
-  yarnVersion = '1.3.2'
-  download = true
-  workDir = file("$projectDir/.gradle/nodejs")
-  npmWorkDir = file("$projectDir/.gradle/npm")
-  yarnWorkDir = file("$projectDir/.gradle/yarn")
+    version = '8.9.2'
+    npmVersion = '5.5.1'
+    yarnVersion = '1.3.2'
+    download = true
+    workDir = file("$projectDir/.gradle/nodejs")
+    npmWorkDir = file("$projectDir/.gradle/npm")
+    yarnWorkDir = file("$projectDir/.gradle/yarn")
 }
 
 pact {
-  publish {
-    pactDirectory = "$projectDir/pacts"
-    pactBrokerUrl = 'http://localhost:1080'
-  }
+    publish {
+        pactDirectory = "$projectDir/pacts"
+        pactBrokerUrl = 'http://localhost:1080'
+    }
 }
 
 task unitTests(type: NodeTask) {
-  dependsOn yarn
-  script = file('node_modules/.bin/ng')
-  args = ["test"]
+    dependsOn yarn
+    script = file('node_modules/.bin/ng')
+    args = ["test"]
 }
 
 task endToEndTests(type: NodeTask) {
-  dependsOn yarn
-  script = file('node_modules/.bin/ng')
-  args = ["e2e", "--environment=e2e"]
+    dependsOn yarn
+    script = file('node_modules/.bin/ng')
+    args = ["e2e", "--environment=e2e"]
 }
 
 check.dependsOn unitTests, endToEndTests
@@ -40,9 +40,9 @@ pactPublish.dependsOn endToEndTests
 pactPublish.dependsOn ':pactBrokerComposeUp'
 
 task buildApp(type: NodeTask) {
-  dependsOn yarn, check
-  script = file('node_modules/.bin/ng')
-  args = ["build", "--prod", "--build-optimizer"]
+    dependsOn yarn, check
+    script = file('node_modules/.bin/ng')
+    args = ["build", "--prod", "--build-optimizer"]
 }
 
 build.dependsOn buildApp
@@ -51,28 +51,28 @@ import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 
 task copyFilesForDocker(type: Copy) {
-  dependsOn build
-  from project.file('nginx/default.conf')
-  into project.file('build/nginx')
+    dependsOn build
+    from project.file('nginx/default.conf')
+    into project.file('build/nginx')
 }
 
 task createDockerfile(type: Dockerfile) {
-  dependsOn copyFilesForDocker
-  dependsOn build
-  dependsOn ':checkDockerIsAvailable'
-  destFile project.file('build/Dockerfile')
-  from 'nginx:1.13.8-alpine'
-  maintainer "Javier Gil \"javier@gilpereda.com\""
-  copyFile("nginx/default.conf", "/etc/nginx/conf.d/")
-  runCommand("rm -rf /usr/share/nginx/html/*")
-  copyFile("dist", "/usr/share/nginx/html")
-  entryPoint("nginx", "-g", "daemon off;")
-  exposePort(80)
+    dependsOn copyFilesForDocker
+    dependsOn build
+    dependsOn ':checkDockerIsAvailable'
+    destFile project.file('build/Dockerfile')
+    from 'nginx:1.13.8-alpine'
+    maintainer "Javier Gil \"javier@gilpereda.com\""
+    copyFile("nginx/default.conf", "/etc/nginx/conf.d/")
+    runCommand("rm -rf /usr/share/nginx/html/*")
+    copyFile("dist", "/usr/share/nginx/html")
+    entryPoint("nginx", "-g", "daemon off;")
+    exposePort(80)
 }
 
 task buildDockerImage(type: DockerBuildImage) {
-  dependsOn createDockerfile
-  inputDir project.file('build')
-  tag "jagilpe/ng-frontend:latest"
+    dependsOn createDockerfile
+    inputDir project.file('build')
+    tag "jagilpe/ng-frontend:latest"
 }
 
