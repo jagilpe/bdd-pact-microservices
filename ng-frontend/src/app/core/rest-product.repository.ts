@@ -15,4 +15,8 @@ export class RestProductRepository implements ProductRepository {
     return this.http.get<Product[]>(`${this.backendUrl}/products?category=${categoryId}`);
   }
 
+  findOneById(productId: number): Observable<Product> {
+    return this.http.get<Product>(`${this.backendUrl}/products/${productId}`);
+  }
+
 }

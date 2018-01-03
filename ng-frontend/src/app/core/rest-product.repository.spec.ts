@@ -9,8 +9,14 @@ const expect = chai.expect;
 
 describe('The Product Repository', () => {
 
+  const productId: number = 1;
   const categoryId: number = 1;
   const backendUrl: string = '/api/v1';
+  const product: Product = {
+    id: productId,
+    name: 'Product name',
+    manufacturer: 'Manufacturer'
+  };
   const products: Product[] = [
     {id: 1, name: 'Product 1', manufacturer: 'Manufacturer 1'},
     {id: 2, name: 'Product 2', manufacturer: 'Manufacturer 2'},
@@ -38,4 +44,17 @@ describe('The Product Repository', () => {
       request.flush(products);
       httpMock.verify();
   }));
+
+  it('should return the details of a product', inject(
+    [ RestProductRepository, HttpTestingController ],
+    (productRepository: RestProductRepository, httpMock: HttpTestingController) => {
+      expect(productRepository.findOneById(productId).toPromise()).to.eventually.equal(product);
+
+      const request = httpMock.expectOne(`${backendUrl}/products/${productId}`);
+      expect(request.request.method).to.equal('GET');
+
+      request.flush(product);
+
+      httpMock.verify();
+    }));
 });

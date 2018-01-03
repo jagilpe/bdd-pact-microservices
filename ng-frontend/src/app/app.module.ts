@@ -6,13 +6,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomePage } from './home/home.page';
 import { CategoryPage } from './category/category.page';
 import { CoreModule } from './core/core.module';
+import { ProductOffersPage } from './offers/product-offers.page';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomePage,
-    CategoryPage
+    CategoryPage,
+    ProductOffersPage
   ],
   imports: [
     AppRoutingModule,
@@ -22,7 +24,8 @@ import { CoreModule } from './core/core.module';
   providers: [],
   entryComponents: [
     HomePage,
-    CategoryPage
+    CategoryPage,
+    ProductOffersPage
   ],
   bootstrap: [AppComponent]
 })

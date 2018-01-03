@@ -55,6 +55,30 @@
           }
         }
       }
+    },
+    {
+      "description": "a request for the details of a product",
+      "providerState": "there is a product iPhone 8",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/products/1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "id": 1,
+          "name": "iPhone 8",
+          "manufacturer": "Apple"
+        },
+        "matchingRules": {
+          "$.body": {
+            "match": "type"
+          }
+        }
+      }
     }
   ],
   "metadata": {
