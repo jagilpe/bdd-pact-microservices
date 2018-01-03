@@ -1,0 +1,64 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.9.RELEASE'
+        jarName = "api-gateway-${version}.jar"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('com.bmuschko:gradle-docker-plugin:3.2.1')
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+task copyFilesForDocker(type: Copy) {
+    dependsOn build
+    from project.file("build/libs/${jarName}")
+    into project.file("build/docker/files")
+}
+
+def entryPointCommand = [
+    "/usr/bin/java",
+    "-jar",
+    "/opt/api-gateway/lib/api-gateway.jar"
+]
+
+task createDockerfile(type: Dockerfile) {
+    dependsOn copyFilesForDocker
+    destFile project.file('build/docker/Dockerfile')
+    from("alpine:edge")
+    maintainer "Javier Gil \"javier@gilpereda.com\""
+    runCommand "apk add --no-cache openjdk8"
+    copyFile("files/${jarName}", "/opt/api-gateway/lib/api-gateway.jar")
+    entryPoint(*entryPointCommand)
+    exposePort 8080
+}
+
+task buildDockerImage(type: DockerBuildImage) {
+    dependsOn createDockerfile
+    dependsOn ':checkDockerIsAvailable'
+    inputDir project.file('build/docker')
+    tags = ['jagilpe/api-gateway:latest', "jagilpe/api-gateway:${version}".toString()]
+}

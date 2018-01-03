@@ -4,3 +4,7 @@ services:
     image: 'jagilpe/ng-frontend'
     expose:
       - "80"
+  api-gateway:
+    image: 'jagilpe/api-gateway:latest'
+    ports:
+      - 8080:8080
