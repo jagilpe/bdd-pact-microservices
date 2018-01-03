@@ -3,18 +3,19 @@ import { CategoryPage } from './category.page';
 import { Product } from '../domain/product';
 import { By } from '@angular/platform-browser';
 import * as _ from 'underscore';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { BACKEND_URL } from '../app.parameters';
 import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import { PRODUCT_REPOSITORY } from '../app-injectable-tokens';
+import { ProductRepository } from '../domain/product-repository';
+import createSpyObj = jasmine.createSpyObj;
+import Spy = jasmine.Spy;
 
 describe('The Category Page', () => {
 
   const categoryId: number = 1;
   const paramMap: ParamMap = convertToParamMap({ categoryId: categoryId });
-  const backendUrl: string = '/api';
-  let httpMock: HttpTestingController;
+  let productRepository: ProductRepository;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -22,13 +23,12 @@ describe('The Category Page', () => {
         CategoryPage
       ],
       providers: [
-        { provide: BACKEND_URL, useValue: backendUrl },
+        { provide: PRODUCT_REPOSITORY, useFactory: () => createSpyObj('ProductRepository', ['findAllByCategory']) },
         { provide: ActivatedRoute, useValue: { paramMap: Observable.of(paramMap) } }
-      ],
-      imports: [ HttpClientTestingModule ]
+      ]
     }).compileComponents();
 
-    httpMock = TestBed.get(HttpTestingController);
+    productRepository = TestBed.get(PRODUCT_REPOSITORY);
   }));
 
   it('should be built', async(() => {
@@ -45,24 +45,17 @@ describe('The Category Page', () => {
       { id: 4, name: 'Product 4', manufacturer: 'Manufacturer 1'}
     ];
 
+    (<Spy> productRepository.findAllByCategory).and.returnValue(Observable.of(products));
+
     const fixture = TestBed.createComponent(CategoryPage);
     fixture.detectChanges();
-
-    const request = httpMock.expectOne(`${backendUrl}/products?category=${categoryId}`);
-    expect(request.request.method).toEqual('GET');
-    request.flush(products);
-
     fixture.whenStable()
-      .then(() => {
-        fixture.detectChanges();
-        return fixture.whenStable();
-      })
       .then(() => {
         const productElems = fixture.debugElement.queryAll(By.css('#product-list .product'));
         expect(productElems.length).toBe(products.length);
         _.forEach(productElems, (productElem, index) => expect(productElem.nativeElement.innerText).toBe(products[index].name));
 
-        httpMock.verify();
+        expect(productRepository.findAllByCategory).toHaveBeenCalledWith(categoryId);
         done();
       });
   });
