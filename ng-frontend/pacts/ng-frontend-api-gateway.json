@@ -1,0 +1,65 @@
+{
+  "consumer": {
+    "name": "ng-frontend"
+  },
+  "provider": {
+    "name": "api-gateway"
+  },
+  "interactions": [
+    {
+      "description": "A request for products in the category 1",
+      "providerState": "there are 5 products in the category 1",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/products",
+        "query": "category=1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "id": 1,
+            "name": "iPhone 8",
+            "manufacturer": "Apple"
+          },
+          {
+            "id": 1,
+            "name": "iPhone 8",
+            "manufacturer": "Apple"
+          },
+          {
+            "id": 1,
+            "name": "iPhone 8",
+            "manufacturer": "Apple"
+          },
+          {
+            "id": 1,
+            "name": "iPhone 8",
+            "manufacturer": "Apple"
+          },
+          {
+            "id": 1,
+            "name": "iPhone 8",
+            "manufacturer": "Apple"
+          }
+        ],
+        "matchingRules": {
+          "$.body": {
+            "min": 5
+          },
+          "$.body[*].*": {
+            "match": "type"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

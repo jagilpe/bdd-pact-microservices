@@ -4,20 +4,28 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomePage } from './home/home.page';
+import { CategoryPage } from './category/category.page';
+import { HttpClientModule } from '@angular/common/http';
+import { injectableParameters } from './app.parameters';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomePage
+    HomePage,
+    CategoryPage
   ],
   imports: [
     AppRoutingModule,
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    ...injectableParameters
+  ],
   entryComponents: [
-    HomePage
+    HomePage,
+    CategoryPage
   ],
   bootstrap: [AppComponent]
 })

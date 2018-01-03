@@ -12,6 +12,7 @@ defineSupportCode(({ AfterAll, BeforeAll }) => {
     provider: 'api-gateway',
     spec: 2,
     port: API_BACKEND_PORT,
+    cors: true,
     dir: path.resolve(__dirname, '../../pacts')
   });
 
