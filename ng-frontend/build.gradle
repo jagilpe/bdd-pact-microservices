@@ -1,4 +1,5 @@
 plugins {
+  id "au.com.dius.pact" version "3.2.13"
   id "com.moowork.node" version "1.2.0"
 }
 
@@ -14,6 +15,13 @@ node {
   yarnWorkDir = file("$projectDir/.gradle/yarn")
 }
 
+pact {
+  publish {
+    pactDirectory = "$projectDir/pacts"
+    pactBrokerUrl = 'http://localhost:1080'
+  }
+}
+
 task unitTests(type: NodeTask) {
   dependsOn yarn
   script = file('node_modules/.bin/ng')
@@ -27,6 +35,9 @@ task endToEndTests(type: NodeTask) {
 }
 
 check.dependsOn unitTests, endToEndTests
+
+pactPublish.dependsOn endToEndTests
+pactPublish.dependsOn ':pactBrokerComposeUp'
 
 task buildApp(type: NodeTask) {
   dependsOn yarn, check
