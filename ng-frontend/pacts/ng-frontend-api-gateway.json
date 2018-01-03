@@ -79,6 +79,78 @@
           }
         }
       }
+    },
+    {
+      "description": "a request for the offers of a product",
+      "providerState": "there are 8 offers for product 1",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/offers/product/1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "productId": 1,
+            "shopId": 1,
+            "shopName": "Shop 1",
+            "price": 700
+          },
+          {
+            "productId": 1,
+            "shopId": 1,
+            "shopName": "Shop 1",
+            "price": 700
+          },
+          {
+            "productId": 1,
+            "shopId": 1,
+            "shopName": "Shop 1",
+            "price": 700
+          },
+          {
+            "productId": 1,
+            "shopId": 1,
+            "shopName": "Shop 1",
+            "price": 700
+          },
+          {
+            "productId": 1,
+            "shopId": 1,
+            "shopName": "Shop 1",
+            "price": 700
+          },
+          {
+            "productId": 1,
+            "shopId": 1,
+            "shopName": "Shop 1",
+            "price": 700
+          },
+          {
+            "productId": 1,
+            "shopId": 1,
+            "shopName": "Shop 1",
+            "price": 700
+          },
+          {
+            "productId": 1,
+            "shopId": 1,
+            "shopName": "Shop 1",
+            "price": 700
+          }
+        ],
+        "matchingRules": {
+          "$.body": {
+            "min": 8
+          },
+          "$.body[*].*": {
+            "match": "type"
+          }
+        }
+      }
     }
   ],
   "metadata": {

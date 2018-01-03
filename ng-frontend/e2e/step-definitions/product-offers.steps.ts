@@ -2,6 +2,7 @@ import { defineSupportCode } from 'cucumber';
 import { Product } from '../../src/app/domain/product';
 import { ProductOffersPo } from '../pages/product-offers.po';
 import { apiBackend } from '../pact/init-pact.step';
+import { ProductOffer } from '../../src/app/domain/product-offer';
 
 const chai = require('chai').use(require('chai-as-promised'));
 const expect = chai.expect;
@@ -19,7 +20,7 @@ defineSupportCode(({ Given, When, Then, After }) => {
     }
   };
 
-  const offers: { [s: string]: any } = {
+  const offers: { [s: string]: ProductOffer } = {
     'iPhone 8': { productId: 1, shopId: 1, shopName: 'Shop 1', price: 700.00 }
   };
 

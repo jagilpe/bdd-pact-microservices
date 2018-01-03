@@ -6,4 +6,18 @@
       <span id="product-manufacturer">{{ product.manufacturer }}</span>
     </div>
   </div>
+  <table>
+    <thead>
+    <tr>
+      <th>Shop</th>
+      <th>Price</th>
+    </tr>
+    </thead>
+    <tbody id="offer-list">
+    <tr class="offer" *ngFor="let offer of productOffers">
+      <td class="shop-name">{{ offer.shopName }}</td>
+      <td class="price">{{ offer.price }}</td>
+    </tr>
+    </tbody>
+  </table>
 </ng-container>
