@@ -1,0 +1,6 @@
+version: '3'
+services:
+  ng-frontend:
+    image: 'jagilpe/ng-frontend'
+    expose:
+      - "80"
