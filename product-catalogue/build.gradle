@@ -30,6 +30,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("au.com.dius:pact-jvm-provider-spring_2.12:3.5.10")
 }
 
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
@@ -57,3 +58,5 @@ task buildDockerImage(type: DockerBuildImage) {
     inputDir project.file('build/docker')
     tags = ['jagilpe/product-catalog-service:latest', "jagilpe/product-catalog-service:${version}".toString()]
 }
+
+processTestResources.dependsOn ':api-gateway:pactPublish'

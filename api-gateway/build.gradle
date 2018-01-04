@@ -101,3 +101,6 @@ task buildDockerImage(type: DockerBuildImage) {
 }
 
 processTestResources.dependsOn(":ng-frontend:pactPublish")
+
+pactPublish.dependsOn check
+pactPublish.dependsOn ':pactBrokerComposeUp'

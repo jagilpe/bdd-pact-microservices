@@ -7,7 +7,7 @@ bdd-pact:
     base-url: http://localhost:8082
 zuul:
   routes:
-    products-catalog-service:
+    products-catalogue-service:
       path: /api/v1/products/**
       url: ${bdd-pact.products-service.base-url}
     offers-service:
