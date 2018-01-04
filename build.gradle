@@ -28,10 +28,12 @@ task checkDockerIsAvailable(type: DockerInfo)
 dockerCompose {
     pactBroker {
         useComposeFiles = ['docker-compose/pact-broker-compose.yml']
+        removeOrphans = true
     }
 
     bddPactAppBundle {
         useComposeFiles = ['docker-compose/application-compose.yml']
+        removeOrphans = true
     }
 }
 

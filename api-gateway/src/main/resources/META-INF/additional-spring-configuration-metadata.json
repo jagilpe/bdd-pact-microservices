@@ -4,6 +4,16 @@
       "name": "bdd-pact.ng-frontend.base-url",
       "type": "java.lang.String",
       "description": "The base url for the angular frontend"
+    },
+    {
+      "name": "bdd-pact.products-service.base-url",
+      "type": "java.lang.String",
+      "description": "The base url for the product catalog service"
+    },
+    {
+      "name": "bdd-pact.offers-service.base-url",
+      "type": "java.lang.String",
+      "description": "The base url for the offers service"
     }
   ]
 }

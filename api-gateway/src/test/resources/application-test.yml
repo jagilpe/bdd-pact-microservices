@@ -1,0 +1,4 @@
+api-gateway:
+  providers-mapping:
+    excluded:
+     - "ng-frontend"
