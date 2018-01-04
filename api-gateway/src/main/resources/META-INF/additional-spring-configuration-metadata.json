@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "bdd-pact.ng-frontend.base-url",
+      "type": "java.lang.String",
+      "description": "The base url for the angular frontend"
+    }
+  ]
+}

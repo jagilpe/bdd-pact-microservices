@@ -1,9 +1,21 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath('com.bmuschko:gradle-docker-plugin:3.2.1')
+    }
+}
+
+
 plugins {
     id "au.com.dius.pact" version "3.2.13"
     id "com.moowork.node" version "1.2.0"
 }
 
 apply plugin: 'base'
+apply plugin: 'com.bmuschko.docker-remote-api'
 
 node {
     version = '8.9.2'

@@ -5,9 +5,12 @@ buildscript {
     }
     repositories {
         mavenCentral()
+        jcenter()
+        maven { url 'http://repo.spring.io/plugins-release' }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('io.spring.gradle:propdeps-plugin:0.0.9.RELEASE')
         classpath('com.bmuschko:gradle-docker-plugin:3.2.1')
     }
 }
@@ -16,6 +19,12 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.bmuschko.docker-remote-api'
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-idea'
+apply plugin: 'propdeps-eclipse'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -28,7 +37,17 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-actuator')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('org.springframework.cloud:spring-cloud-starter-zuul')
+    optional("org.springframework.boot:spring-boot-configuration-processor")
 }
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Edgware.RELEASE"
+    }
+}
+
+compileJava.dependsOn(processResources)
 
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
@@ -42,6 +61,7 @@ task copyFilesForDocker(type: Copy) {
 def entryPointCommand = [
     "/usr/bin/java",
     "-jar",
+    '-Dbdd-pact.ng-frontend.base-url=${NG_FRONTEND_URL}',
     "/opt/api-gateway/lib/api-gateway.jar"
 ]
 
@@ -51,6 +71,7 @@ task createDockerfile(type: Dockerfile) {
     from("alpine:edge")
     maintainer "Javier Gil \"javier@gilpereda.com\""
     runCommand "apk add --no-cache openjdk8"
+    environmentVariable('NG_FRONTEND_URL', 'http://ng-frontend')
     copyFile("files/${jarName}", "/opt/api-gateway/lib/api-gateway.jar")
     entryPoint(*entryPointCommand)
     exposePort 8080

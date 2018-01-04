@@ -17,20 +17,6 @@ allprojects {
     version '0.1-SNAPSHOT'
 }
 
-subprojects {
-    buildscript {
-        repositories {
-            mavenCentral()
-            jcenter()
-        }
-        dependencies {
-            classpath('com.bmuschko:gradle-docker-plugin:3.2.1')
-        }
-    }
-
-    apply plugin: 'com.bmuschko.docker-remote-api'
-}
-
 task wrapper(type: Wrapper) {
     gradleVersion = '4.3.1'
 }
@@ -43,7 +29,14 @@ dockerCompose {
     pactBroker {
         useComposeFiles = ['docker-compose/pact-broker-compose.yml']
     }
+
+    bddPactAppBundle {
+        useComposeFiles = ['docker-compose/application-compose.yml']
+    }
 }
 
 pactBrokerComposeUp.dependsOn checkDockerIsAvailable
 
+bddPactAppBundleComposeUp.dependsOn checkDockerIsAvailable
+bddPactAppBundleComposeUp.dependsOn ':ng-frontend:buildDockerImage'
+bddPactAppBundleComposeUp.dependsOn ':api-gateway:buildDockerImage'

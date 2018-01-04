@@ -1,0 +1,8 @@
+bdd-pact:
+  ng-frontend:
+    base-url: http://localhost:4200
+zuul:
+  routes:
+    ng-frontend:
+      path: /**
+      url: ${bdd-pact.ng-frontend.base-url}
