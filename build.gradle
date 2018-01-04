@@ -30,13 +30,14 @@ dockerCompose {
         useComposeFiles = ['docker-compose/pact-broker-compose.yml']
     }
 
-    bddPactAppBundle {
+    bddPactApp {
         useComposeFiles = ['docker-compose/application-compose.yml']
     }
 }
 
 pactBrokerComposeUp.dependsOn checkDockerIsAvailable
 
-bddPactAppBundleComposeUp.dependsOn checkDockerIsAvailable
-bddPactAppBundleComposeUp.dependsOn ':ng-frontend:buildDockerImage'
-bddPactAppBundleComposeUp.dependsOn ':api-gateway:buildDockerImage'
+bddPactAppComposeUp.dependsOn checkDockerIsAvailable
+bddPactAppComposeUp.dependsOn ':ng-frontend:buildDockerImage'
+bddPactAppComposeUp.dependsOn ':api-gateway:buildDockerImage'
+bddPactAppComposeUp.dependsOn ':product-catalogue:buildDockerImage'

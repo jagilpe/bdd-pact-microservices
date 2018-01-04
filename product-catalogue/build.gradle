@@ -1,0 +1,59 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.9.RELEASE'
+        jarName = "product-catalogue-${version}.jar"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('com.bmuschko:gradle-docker-plugin:3.2.1')
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'com.bmuschko.docker-remote-api'
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+task copyFilesForDocker(type: Copy) {
+    dependsOn build
+    from project.file("build/libs/${jarName}")
+    into project.file('build/docker/files')
+}
+
+task createDockerfile(type: Dockerfile) {
+    dependsOn copyFilesForDocker
+    destFile project.file('build/docker/Dockerfile')
+    from("alpine:edge")
+    maintainer('Javier Gil "javier@gilpereda.com"')
+    runCommand('apk add --no-cache openjdk8')
+    copyFile("files/${jarName}", "/opt/product-catalogue/lib/product-catalogue.jar")
+    entryPoint('/usr/bin/java', '-jar', '-Dserver.port=8080', '/opt/product-catalogue/lib/product-catalogue.jar')
+    exposePort 8080
+}
+
+task buildDockerImage(type: DockerBuildImage) {
+    dependsOn createDockerfile
+    inputDir project.file('build/docker')
+    tags = ['jagilpe/product-catalog-service:latest', "jagilpe/product-catalog-service:${version}".toString()]
+}
