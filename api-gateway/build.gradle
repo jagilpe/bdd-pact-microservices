@@ -52,6 +52,13 @@ dependencyManagement {
     }
 }
 
+pact {
+    publish {
+        pactDirectory = "$projectDir/build/pacts"
+        pactBrokerUrl = 'http://localhost:1080'
+    }
+}
+
 compileJava.dependsOn(processResources)
 
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
