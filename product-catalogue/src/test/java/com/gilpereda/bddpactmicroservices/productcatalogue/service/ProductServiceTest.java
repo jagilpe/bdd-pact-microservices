@@ -1,7 +1,7 @@
-package com.gilpereda.bddpactmicroservices.productcatalogue.controller;
+package com.gilpereda.bddpactmicroservices.productcatalogue.service;
 
 import com.gilpereda.bddpactmicroservices.productcatalogue.model.Product;
-import com.gilpereda.bddpactmicroservices.productcatalogue.service.ProductService;
+import com.gilpereda.bddpactmicroservices.productcatalogue.persistence.ProductRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -11,12 +11,13 @@ import org.mockito.MockitoAnnotations;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class ProductControllerTest {
+public class ProductServiceTest {
 
     @Mock
-    private ProductService productService;
+    private ProductRepository productRepository;
+
     @InjectMocks
-    private ProductController productController;
+    private ProductService productService;
 
     @Before
     public void setUp() {
@@ -24,16 +25,14 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void shouldReturnAProduct() {
+    public void shouldFindAProductByItsId() {
         long productId = 1;
         Product product = new Product();
         product.setId(productId);
         product.setName("Product 1");
         product.setManufacturer("Manufacturer 1");
 
-        when(productService.findProductById(productId)).thenReturn(product);
-
-        assertThat(productController.getProductDetail(productId)).isEqualTo(product);
+        when(productRepository.findOneById(productId)).thenReturn(product);
+        assertThat(productService.findProductById(productId)).isEqualTo(product);
     }
-
 }
