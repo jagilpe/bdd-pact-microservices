@@ -8,6 +8,7 @@ import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
 import au.com.dius.pact.provider.spring.SpringRestPactRunner;
 import com.gilpereda.bddpactmicroservices.productcatalogue.util.DataFixtureLoader;
+import com.gilpereda.bddpactmicroservices.productcatalogue.util.TestCase;
 import org.junit.After;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,12 @@ public class ProductCatalogueAppIT {
     }
 
     @State("there are 5 products in the category 1")
-    public void setUpStateThereAreFiveProductsInCategory1() {
-
+    public void setUpStateThereAreFiveProductsInCategory1() throws Exception {
+        dataFixtureLoader.setUpFixture(TestCase.FIVE_PRODUCTS_IN_CATEGORY_1);
     }
 
     @State("there is a product iPhone 8")
     public void setUpStateThereIsAProductIPhone8() throws Exception {
-        dataFixtureLoader.setUpFixture();
+        dataFixtureLoader.setUpFixture(TestCase.ONE_PRODUCT);
     }
 }

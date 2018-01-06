@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -32,6 +34,15 @@ public class ProductControllerTest {
         when(productService.findProductById(productId)).thenReturn(product);
 
         assertThat(productController.getProductDetail(productId)).isEqualTo(product);
+    }
+
+    @Test
+    public void shouldReturnTheProductsOfACategory() {
+        long categoryId = 1;
+        List<Product> products = ProductFactory.getProductList(5, categoryId);
+
+        when(productService.findProductsByCategoryId(categoryId)).thenReturn(products);
+        assertThat(productController.getProducts(categoryId)).isEqualTo(products);
     }
 
 }

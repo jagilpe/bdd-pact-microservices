@@ -3,10 +3,7 @@ package com.gilpereda.bddpactmicroservices.productcatalogue.controller;
 import com.gilpereda.bddpactmicroservices.productcatalogue.model.Product;
 import com.gilpereda.bddpactmicroservices.productcatalogue.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductController {
@@ -17,6 +14,11 @@ public class ProductController {
     @RequestMapping(path = "/{productId}", method = RequestMethod.GET)
     public Product getProductDetail(@PathVariable("productId") final long productId) {
         return productService.findProductById(productId);
+    }
+
+    @RequestMapping(path = "/", method = RequestMethod.GET)
+    public Iterable<Product> getProducts(@RequestParam("category") final long categoryId) {
+        return productService.findProductsByCategoryId(categoryId);
     }
 
 }
