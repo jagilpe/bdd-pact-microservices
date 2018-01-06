@@ -1,6 +1,7 @@
 package com.gilpereda.bddpactmicroservices.productcatalogue.controller;
 
 import com.gilpereda.bddpactmicroservices.productcatalogue.model.Product;
+import com.gilpereda.bddpactmicroservices.productcatalogue.model.ProductFactory;
 import com.gilpereda.bddpactmicroservices.productcatalogue.service.ProductService;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,10 +27,7 @@ public class ProductControllerTest {
     @Test
     public void shouldReturnAProduct() {
         long productId = 1;
-        Product product = new Product();
-        product.setId(productId);
-        product.setName("Product 1");
-        product.setManufacturer("Manufacturer 1");
+        Product product = ProductFactory.getProduct(productId);
 
         when(productService.findProductById(productId)).thenReturn(product);
 
