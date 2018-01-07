@@ -9,3 +9,8 @@ spring:
         show_sql: true
   datasource:
     schema: classpath:sql/schema.sql
+---
+spring:
+  profiles: demo
+  datasource:
+    data: classpath:sql/data.sql
