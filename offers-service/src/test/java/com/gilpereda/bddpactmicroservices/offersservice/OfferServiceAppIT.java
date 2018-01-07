@@ -7,12 +7,11 @@ import au.com.dius.pact.provider.junit.target.HttpTarget;
 import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
 import au.com.dius.pact.provider.spring.SpringRestPactRunner;
+import com.gilpereda.bddpactmicroservices.offersservice.domain.OfferFactory;
 import org.dbunit.DataSourceDatabaseTester;
 import org.dbunit.IDatabaseTester;
-import org.dbunit.dataset.Column;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.DefaultDataSet;
-import org.dbunit.dataset.DefaultTable;
+import org.dbunit.database.AmbiguousTableNameException;
+import org.dbunit.dataset.*;
 import org.dbunit.dataset.datatype.DataType;
 import org.junit.After;
 import org.junit.runner.RunWith;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.sql.DataSource;
-import java.util.stream.IntStream;
 
 @RunWith(SpringRestPactRunner.class)
 @Provider("offers-service")
@@ -45,28 +43,11 @@ public class OfferServiceAppIT {
 
     @State("there are 8 offers for product 1")
     public void setUpStateThereAre8OffersForProduct1() throws Exception {
-        final long productId = 1;
-        final DefaultTable offerTable = new DefaultTable("offer",
-            new Column[] {
-                new Column("id", DataType.BIGINT),
-                new Column("product_id", DataType.BIGINT),
-                new Column("shop_id", DataType.BIGINT),
-                new Column("shop_name", DataType.VARCHAR),
-                new Column("price", DataType.INTEGER)
-            });
-        IntStream.range(0, 8)
-            .boxed()
-            .forEach(i -> {
-                try {
-                    offerTable.addRow(new Object[] { i, productId, i, "Shop " + i, 700});
-                } catch (DataSetException e) {
-                    e.printStackTrace();
-                }
-            });
-        DefaultDataSet dataSet = new DefaultDataSet();
-        dataSet.addTable(offerTable);
+        long productId = 1;
+        int count = 8;
+        IDataSet dataset = getDataset(productId, count);
 
-        getDatabaseTester().setDataSet(dataSet);
+        getDatabaseTester().setDataSet(dataset);
         getDatabaseTester().onSetup();
     }
 
@@ -75,5 +56,32 @@ public class OfferServiceAppIT {
             databaseTester = new DataSourceDatabaseTester(dataSource);
         }
         return databaseTester;
+    }
+
+    private IDataSet getDataset(final long productId, final int count) throws AmbiguousTableNameException {
+        final DefaultTable offerTable = new DefaultTable("offer",
+            new Column[] {
+                new Column("id", DataType.BIGINT),
+                new Column("product_id", DataType.BIGINT),
+                new Column("shop_id", DataType.BIGINT),
+                new Column("shop_name", DataType.VARCHAR),
+                new Column("price", DataType.INTEGER)
+            });
+        OfferFactory.getOffers(productId, count)
+            .forEach(offer -> {
+                try {
+                    offerTable.addRow(new Object[] {
+                        offer.getId(),
+                        offer.getProductId(),
+                        offer.getShopId(),
+                        offer.getShopName(),
+                        offer.getPrice() });
+                } catch (DataSetException e) {
+                    e.printStackTrace();
+                }
+            });
+        DefaultDataSet dataSet = new DefaultDataSet();
+        dataSet.addTable(offerTable);
+        return dataSet;
     }
 }
