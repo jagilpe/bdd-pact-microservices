@@ -1,7 +1,7 @@
-package com.gilpereda.bddpactmicroservices.offersservice.controller;
+package com.gilpereda.bddpactmicroservices.offersservice.service;
 
 import com.gilpereda.bddpactmicroservices.offersservice.domain.Offer;
-import com.gilpereda.bddpactmicroservices.offersservice.service.OfferService;
+import com.gilpereda.bddpactmicroservices.offersservice.persistence.OfferRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -15,12 +15,12 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class OfferControllerTest {
+public class OfferServiceTest {
 
     @Mock
-    private OfferService offerService;
+    private OfferRepository offerRepository;
     @InjectMocks
-    private OfferController offerController;
+    private OfferService offerService;
 
     @Before
     public void setUp() {
@@ -42,8 +42,8 @@ public class OfferControllerTest {
             })
             .collect(Collectors.toList());
 
-        when(offerService.findAllTheOffersOfAProduct(productId)).thenReturn(offers);
-        assertThat(offerController.getProductOffers(productId)).isEqualTo(offers);
+        when(offerRepository.findAllByProductId(productId)).thenReturn(offers);
+        assertThat(offerService.findAllTheOffersOfAProduct(productId)).isEqualTo(offers);
     }
 
 }
