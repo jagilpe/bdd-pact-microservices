@@ -7,8 +7,21 @@ import au.com.dius.pact.provider.junit.target.HttpTarget;
 import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
 import au.com.dius.pact.provider.spring.SpringRestPactRunner;
+import org.dbunit.DataSourceDatabaseTester;
+import org.dbunit.IDatabaseTester;
+import org.dbunit.dataset.Column;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.DefaultDataSet;
+import org.dbunit.dataset.DefaultTable;
+import org.dbunit.dataset.datatype.DataType;
+import org.junit.After;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.sql.DataSource;
+import java.util.stream.IntStream;
 
 @RunWith(SpringRestPactRunner.class)
 @Provider("offers-service")
@@ -16,11 +29,51 @@ import org.springframework.boot.test.context.SpringBootTest;
 @PactBroker(protocol = "http", host = "127.0.0.1", port = "1080")
 public class OfferServiceAppIT {
 
+    @Qualifier("dataSource")
+    @Autowired
+    private DataSource dataSource;
+
+    private IDatabaseTester databaseTester;
+
     @TestTarget
     public Target target = new HttpTarget(8082);
 
-    @State("there are 8 offers for product 1")
-    public void setUpStateThereAre8OffersForProduct1() {
+    @After
+    public void tearDown() throws Exception {
+        getDatabaseTester().onTearDown();
+    }
 
+    @State("there are 8 offers for product 1")
+    public void setUpStateThereAre8OffersForProduct1() throws Exception {
+        final long productId = 1;
+        final DefaultTable offerTable = new DefaultTable("offer",
+            new Column[] {
+                new Column("id", DataType.BIGINT),
+                new Column("product_id", DataType.BIGINT),
+                new Column("shop_id", DataType.BIGINT),
+                new Column("shop_name", DataType.VARCHAR),
+                new Column("price", DataType.INTEGER)
+            });
+        IntStream.range(0, 8)
+            .boxed()
+            .forEach(i -> {
+                try {
+                    offerTable.addRow(new Object[] { i, productId, i, "Shop " + i, 700});
+                } catch (DataSetException e) {
+                    e.printStackTrace();
+                }
+            });
+        DefaultDataSet dataSet = new DefaultDataSet();
+        dataSet.addTable(offerTable);
+
+        getDatabaseTester().setDataSet(dataSet);
+        getDatabaseTester().onSetup();
+    }
+
+    private IDatabaseTester getDatabaseTester() {
+        if (databaseTester == null) {
+            databaseTester = new DataSourceDatabaseTester(dataSource);
+        }
+        return databaseTester;
     }
 }
