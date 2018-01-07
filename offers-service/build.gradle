@@ -32,6 +32,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("au.com.dius:pact-jvm-provider-spring_2.12:3.5.10")
 }
 
 task copyFilesForDocker(type: Copy) {
