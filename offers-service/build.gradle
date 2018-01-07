@@ -51,7 +51,8 @@ task createDockerfile(type: Dockerfile) {
     maintainer('Javier Gil "javier@gilpereda.com"')
     runCommand('apk add --no-cache openjdk8')
     copyFile("files/${jarName}", "/opt/offers-service/lib/offers-service.jar")
-    entryPoint('/usr/bin/java', '-jar', '-Dserver.port=8080', '/opt/product-catalogue/lib/offers-service.jar')
+    environmentVariable('ACTIVE_PROFILES', 'production')
+    entryPoint('/usr/bin/java', '-jar', '-Dspring.profiles.active=${ACTIVE_PROFILES}', '-Dserver.port=8080', '/opt/offers-service/lib/offers-service.jar')
     exposePort 8080
 }
 
@@ -61,3 +62,5 @@ task buildDockerImage(type: DockerBuildImage) {
     inputDir project.file('build/docker')
     tags = ['jagilpe/offers-service:latest', "jagilpe/offers-service:${version}".toString()]
 }
+
+processTestResources.dependsOn ':api-gateway:pactPublish'

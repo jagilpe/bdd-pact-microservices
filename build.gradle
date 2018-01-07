@@ -41,3 +41,4 @@ bddPactAppComposeUp.dependsOn checkDockerIsAvailable
 bddPactAppComposeUp.dependsOn ':ng-frontend:buildDockerImage'
 bddPactAppComposeUp.dependsOn ':api-gateway:buildDockerImage'
 bddPactAppComposeUp.dependsOn ':product-catalogue:buildDockerImage'
+bddPactAppComposeUp.dependsOn ':offers-service:buildDockerImage'

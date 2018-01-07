@@ -3,3 +3,11 @@ server:
 spring:
   datasource:
     schema: classpath:sql/schema.sql
+  jpa:
+    hibernate:
+      ddl-auto: none
+---
+spring:
+  profiles: demo
+  datasource:
+    data: classpath:sql/data.sql

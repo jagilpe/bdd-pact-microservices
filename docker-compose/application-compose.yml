@@ -4,6 +4,8 @@ services:
     image: 'jagilpe/ng-frontend'
     expose:
       - "80"
+    networks:
+      - frontend
   api-gateway:
     image: 'jagilpe/api-gateway:latest'
     environment:
@@ -12,5 +14,21 @@ services:
       - NG_FRONTEND_URL=http://ng-frontend
     ports:
       - 8080:8080
+    networks:
+      - frontend
+      - backend
   product-catalog-service:
     image: 'jagilpe/product-catalog-service:latest'
+    environment:
+      - ACTIVE_PROFILES=demo
+    networks:
+      - backend
+  offers-service:
+    image: 'jagilpe/offers-service:latest'
+    environment:
+      - ACTIVE_PROFILES=demo
+    networks:
+      - backend
+networks:
+  frontend: ~
+  backend: ~
