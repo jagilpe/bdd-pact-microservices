@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { PRODUCT_REPOSITORY } from '../app-injectable-tokens';
 import { ProductRepository } from '../domain/product-repository';
+import { RouterTestingModule } from '@angular/router/testing';
 import createSpyObj = jasmine.createSpyObj;
 import Spy = jasmine.Spy;
 
@@ -25,6 +26,9 @@ describe('The Category Page', () => {
       providers: [
         { provide: PRODUCT_REPOSITORY, useFactory: () => createSpyObj('ProductRepository', ['findAllByCategory']) },
         { provide: ActivatedRoute, useValue: { paramMap: Observable.of(paramMap) } }
+      ],
+      imports: [
+        RouterTestingModule
       ]
     }).compileComponents();
 

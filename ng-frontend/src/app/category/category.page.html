@@ -1,3 +1,10 @@
-<div id="product-list">
-  <div class="product" *ngFor="let product of products">{{ product.name }}</div>
+<div id="product-list" class="row">
+  <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let product of products">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="product card-title">{{ product.name }}</h5>
+        <a class="btn btn-dark" routerLink="/product-offers/{{ product.id }}">View details</a>
+      </div>
+    </div>
+  </div>
 </div>
