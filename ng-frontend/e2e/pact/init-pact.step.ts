@@ -5,7 +5,7 @@ import { API_BACKEND_PORT } from '../../src/environments/environment.e2e';
 
 export let apiBackend: Provider.PactProvider;
 
-defineSupportCode(({ AfterAll, BeforeAll }) => {
+defineSupportCode(({ AfterAll, BeforeAll, After }) => {
 
   apiBackend = Provider({
     consumer: 'ng-frontend',
@@ -29,5 +29,7 @@ defineSupportCode(({ AfterAll, BeforeAll }) => {
   });
 
   AfterAll(() => apiBackend.finalize());
+
+  After(() => apiBackend.verify());
 
 });

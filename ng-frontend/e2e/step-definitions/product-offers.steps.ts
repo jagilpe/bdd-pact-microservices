@@ -10,7 +10,7 @@ const expect = chai.expect;
 const pact = require('pact');
 const { somethingLike, eachLike } = pact.Matchers;
 
-defineSupportCode(({ Given, When, Then, After }) => {
+defineSupportCode(({ Given, When, Then }) => {
 
   const products: { [s: string]: Product } = {
     'iPhone 8': {
@@ -77,7 +77,5 @@ defineSupportCode(({ Given, When, Then, After }) => {
   Then('I get {int} items in the list of offers', (offersCount: number) => {
     return expect(productOffersPage.getOffersCount()).to.eventually.equal(offersCount);
   });
-
-  After(() => apiBackend.verify());
 
 });

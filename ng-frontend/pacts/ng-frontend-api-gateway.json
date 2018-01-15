@@ -57,6 +57,54 @@
       }
     },
     {
+      "description": "A request a list of categories",
+      "providerState": "there are 6 categories",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/categories"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "id": 1,
+            "name": "Smartphones"
+          },
+          {
+            "id": 1,
+            "name": "Smartphones"
+          },
+          {
+            "id": 1,
+            "name": "Smartphones"
+          },
+          {
+            "id": 1,
+            "name": "Smartphones"
+          },
+          {
+            "id": 1,
+            "name": "Smartphones"
+          },
+          {
+            "id": 1,
+            "name": "Smartphones"
+          }
+        ],
+        "matchingRules": {
+          "$.body": {
+            "min": 6
+          },
+          "$.body[*].*": {
+            "match": "type"
+          }
+        }
+      }
+    },
+    {
       "description": "a request for the details of a product",
       "providerState": "there is a product iPhone 8",
       "request": {

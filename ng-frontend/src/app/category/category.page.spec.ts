@@ -43,10 +43,10 @@ describe('The Category Page', () => {
 
   it('should show the list of products of a category', (done) => {
     const products: Array<Product> = [
-      { id: 1, name: 'Product 1', manufacturer: 'Manufacturer 1'},
-      { id: 2, name: 'Product 2', manufacturer: 'Manufacturer 2'},
-      { id: 3, name: 'Product 3', manufacturer: 'Manufacturer 3'},
-      { id: 4, name: 'Product 4', manufacturer: 'Manufacturer 1'}
+      { id: 1, name: 'Product 1', manufacturer: 'Manufacturer 1' },
+      { id: 2, name: 'Product 2', manufacturer: 'Manufacturer 2' },
+      { id: 3, name: 'Product 3', manufacturer: 'Manufacturer 3' },
+      { id: 4, name: 'Product 4', manufacturer: 'Manufacturer 1' }
     ];
 
     (<Spy> productRepository.findAllByCategory).and.returnValue(Observable.of(products));
