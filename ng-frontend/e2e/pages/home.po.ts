@@ -9,4 +9,8 @@ export class HomePO {
   static getWelcomeMessage(): promise.Promise<string> {
     return element(by.css('h1')).getText();
   }
+
+  static getCategoriesCount(): promise.Promise<number> {
+    return element.all(by.css('#category-list .category')).count();
+  }
 }
