@@ -1,18 +1,22 @@
 bdd-pact:
   ng-frontend:
     base-url: http://localhost:4200
-  products-service:
+  products-catalogue-service:
     base-url: http://localhost:8081
   offers-service:
     base-url: http://localhost:8082
 zuul:
+  prefix: /api/v1
+  strip-prefix: true
   routes:
-    products-catalogue-service:
-      path: /api/v1/products/**
-      url: ${bdd-pact.products-service.base-url}
-    offers-service:
-      path: /api/v1/offers/**
+    offers:
+      path: /offers/**
       url: ${bdd-pact.offers-service.base-url}
-    ng-frontend:
-      path: /**
-      url: ${bdd-pact.ng-frontend.base-url}
+    products:
+      path: /products/**
+      url: ${bdd-pact.products-catalogue-service.base-url}
+      strip-prefix: false
+    categories:
+      path: /categories/**
+      url: ${bdd-pact.products-catalogue-service.base-url}
+      strip-prefix: false

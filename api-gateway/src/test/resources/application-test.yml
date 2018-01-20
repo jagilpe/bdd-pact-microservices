@@ -1,4 +1,7 @@
 api-gateway:
   providers-mapping:
+    services-urls:
+      products-catalogue-service: ${bdd-pact.products-catalogue-service.base-url}
+      offers-service: ${bdd-pact.offers-service.base-url}
     excluded:
-     - "ng-frontend"
+      - "ng-frontend"

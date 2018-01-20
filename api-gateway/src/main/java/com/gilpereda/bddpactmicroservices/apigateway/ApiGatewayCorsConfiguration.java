@@ -10,7 +10,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@Profile("devel")
 public class ApiGatewayCorsConfiguration {
 
     @Value("${bdd-pact.ng-frontend.base-url}")

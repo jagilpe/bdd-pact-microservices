@@ -1,30 +1,17 @@
 package com.gilpereda.bddpactmicroservices.apigateway;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.assertj.core.util.Maps;
-import org.springframework.cloud.netflix.zuul.filters.Route;
-import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
-
-import au.com.dius.pact.model.Consumer;
-import au.com.dius.pact.model.Interaction;
-import au.com.dius.pact.model.PactSource;
-import au.com.dius.pact.model.PactSpecVersion;
-import au.com.dius.pact.model.Provider;
-import au.com.dius.pact.model.ProviderState;
-import au.com.dius.pact.model.Request;
-import au.com.dius.pact.model.RequestResponseInteraction;
-import au.com.dius.pact.model.RequestResponsePact;
+import au.com.dius.pact.model.*;
 import au.com.dius.pact.provider.ConsumerInfo;
 import au.com.dius.pact.provider.ProviderInfo;
 import au.com.dius.pact.provider.ProviderVerifier;
 import au.com.dius.pact.provider.junit.target.BaseTarget;
+import com.gilpereda.bddpactmicroservices.apigateway.exception.ProviderNameNotDefinedException;
+import org.assertj.core.util.Maps;
+import org.springframework.cloud.netflix.zuul.filters.Route;
+import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 class ApiGatewayTarget extends BaseTarget implements PactsWriter {
 
@@ -88,25 +75,39 @@ class ApiGatewayTarget extends BaseTarget implements PactsWriter {
     private Map<String,Boolean> verifyRequestMapping(final RequestResponseInteraction interaction, final PactSource source) {
         String requestPath = interaction.getRequest().getPath();
         Route matchingRoute = getMatchingRoute(requestPath);
+        String error = null;
         if (matchingRoute != null) {
-            addInteractionToProvidersPacts(interaction, source, matchingRoute);
-            return Collections.emptyMap();
+            try {
+                addInteractionToProvidersPacts(interaction, source, matchingRoute);
+            } catch (ProviderNameNotDefinedException e) {
+                error = "No provider name for route " + matchingRoute.getPath();
+            }
         } else {
-            return Maps.newHashMap(requestPath + " has no mapping to any service: ", false);
+            error = requestPath + " has no mapping to any service.";
         }
+        return error != null ? Maps.newHashMap(error, false) : Collections.emptyMap();
     }
 
     private void addInteractionToProvidersPacts(
-        final RequestResponseInteraction interaction, final PactSource source, final Route matchingRoute) {
-        String routeId = matchingRoute.getId();
-        RequestResponsePact pact = outputPacts.get(routeId);
+        final RequestResponseInteraction interaction,
+        final PactSource source,
+        final Route matchingRoute) throws ProviderNameNotDefinedException {
+        String providerName = getProviderForRoute(matchingRoute).orElseThrow(ProviderNameNotDefinedException::new);
+        RequestResponsePact pact = outputPacts.get(providerName);
         if (pact == null) {
-            Provider provider = new Provider(routeId);
+            Provider provider = new Provider(providerName);
             Consumer consumer = new Consumer(getProviderInfo(source).getName());
             pact = new RequestResponsePact(provider, consumer, new ArrayList<>());
-            outputPacts.put(routeId, pact);
+            outputPacts.put(providerName, pact);
         }
         pact.mergeInteractions(getNewInteraction(interaction, matchingRoute));
+    }
+
+    private Optional<String> getProviderForRoute(final Route route) {
+        return configuration.getServicesUrls().entrySet().stream()
+            .filter(entry -> entry.getValue().equals(route.getLocation()))
+            .map(Map.Entry::getKey)
+            .findFirst();
     }
 
     private Route getMatchingRoute(final String requestPath) {
