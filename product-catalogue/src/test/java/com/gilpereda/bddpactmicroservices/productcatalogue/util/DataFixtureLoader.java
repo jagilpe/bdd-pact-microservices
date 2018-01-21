@@ -1,8 +1,8 @@
 package com.gilpereda.bddpactmicroservices.productcatalogue.util;
 
 import com.gilpereda.bddpactmicroservices.productcatalogue.model.Category;
-import com.gilpereda.bddpactmicroservices.productcatalogue.model.DataFactory;
 import com.gilpereda.bddpactmicroservices.productcatalogue.model.Product;
+import com.gilpereda.bddpactmicroservices.productcatalogue.model.TestDataFactory;
 import org.dbunit.DataSourceDatabaseTester;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.dataset.Column;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.util.List;
 
 @Component
 public class DataFixtureLoader {
@@ -27,8 +26,6 @@ public class DataFixtureLoader {
 
     public void setUpFixture(final TestCase testCase) throws Exception {
         DefaultDataSet dataSet = new DefaultDataSet();
-        long categoryId;
-        Category category;
         final DefaultTable productTable = new DefaultTable("product",
             new Column[] {
                 new Column("id", DataType.BIGINT),
@@ -41,29 +38,12 @@ public class DataFixtureLoader {
                 new Column("id", DataType.BIGINT),
                 new Column("name", DataType.VARCHAR)
             });
-        switch (testCase) {
-            case ONE_PRODUCT:
-                long productId = 1;
-                Product product = DataFactory.getProduct(productId);
-                category = product.getCategory();
-                categoryId = category.getId();
-                categoryTable.addRow(new Object[] { categoryId, category.getName() });
-                productTable.addRow(new Object[]{ product.getId(), product.getName(), product.getManufacturer(), categoryId });
-                break;
-            case FIVE_PRODUCTS_IN_CATEGORY_1:
-                categoryId = 1;
-                category = DataFactory.getCategory(categoryId);
-                List<Product> products = DataFactory.getProductList(5, category);
-                categoryTable.addRow(new Object[] { category.getId(), category.getName() });
-                for (Product p : products) {
-                    productTable.addRow(new Object[]{ p.getId(), p.getName(), p.getManufacturer(), categoryId });
-                }
-                break;
-            case SIX_CATEGORIES:
-                for(Category cat: DataFactory.getCategories(6)) {
-                    categoryTable.addRow(new Object[] { cat.getId(), cat.getName()});
-                }
-                break;
+        TestFixture testFixture = getTestFixture(testCase);
+        for(Category c: testFixture.categories) {
+            categoryTable.addRow(new Object[] { c.getId(), c.getName() });
+        }
+        for(Product p: testFixture.products) {
+            productTable.addRow(new Object[]{ p.getId(), p.getName(), p.getManufacturer(), p.getCategory().getId() });
         }
 
         dataSet.addTable(categoryTable);
@@ -76,10 +56,49 @@ public class DataFixtureLoader {
         getDatabaseTester().onTearDown();
     }
 
+    private TestFixture getTestFixture(final TestCase testCase) {
+        Category[] categories;
+        Product[] products;
+        switch (testCase) {
+            case ONE_PRODUCT:
+                long productId = 1;
+                Product product = TestDataFactory.getProduct(productId);
+                products = new Product[] { product };
+                categories = new Category[] { product.getCategory() };
+                break;
+            case FIVE_PRODUCTS_IN_CATEGORY_1:
+                long categoryId = 1;
+                int productsCount = 5;
+                categories = new Category[] { TestDataFactory.getCategory(categoryId) };
+                products = TestDataFactory.getProductList(productsCount, categories[0]).toArray(new Product[productsCount]);
+                break;
+            case SIX_CATEGORIES:
+                categories = TestDataFactory.getCategories(6).toArray(new Category[] {});
+                products = new Product[0];
+                break;
+            default:
+                categories = new Category[0];
+                products = new Product[0];
+                break;
+        }
+
+        return new TestFixture(categories, products);
+    }
+
     private IDatabaseTester getDatabaseTester() {
         if (databaseTester == null) {
             databaseTester = new DataSourceDatabaseTester(dataSource);
         }
         return databaseTester;
+    }
+
+    private static final class TestFixture {
+        private final Category[] categories;
+        private final Product[] products;
+
+        TestFixture(final Category[] categories, final Product[] products) {
+            this.categories = categories;
+            this.products = products;
+        }
     }
 }

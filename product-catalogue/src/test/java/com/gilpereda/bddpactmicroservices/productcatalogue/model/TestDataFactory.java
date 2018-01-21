@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class DataFactory {
+public class TestDataFactory {
 
     public static Product getProduct(final long productId) {
         Category category = getCategory(1);
@@ -19,7 +19,7 @@ public class DataFactory {
     public static List<Product> getProductList(final int count, final Category category) {
         return IntStream.range(0, count)
             .boxed()
-            .map(productId -> DataFactory.getProduct(productId, category))
+            .map(productId -> TestDataFactory.getProduct(productId, category))
             .collect(Collectors.toList());
     }
 
@@ -33,7 +33,7 @@ public class DataFactory {
     public static List<Category> getCategories(final int count) {
         return IntStream.rangeClosed(1, count)
             .boxed()
-            .map(DataFactory::getCategory)
+            .map(TestDataFactory::getCategory)
             .collect(Collectors.toList());
     }
 

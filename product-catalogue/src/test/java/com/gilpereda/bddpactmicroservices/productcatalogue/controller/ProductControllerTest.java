@@ -1,7 +1,7 @@
 package com.gilpereda.bddpactmicroservices.productcatalogue.controller;
 
-import com.gilpereda.bddpactmicroservices.productcatalogue.model.DataFactory;
 import com.gilpereda.bddpactmicroservices.productcatalogue.model.Product;
+import com.gilpereda.bddpactmicroservices.productcatalogue.model.TestDataFactory;
 import com.gilpereda.bddpactmicroservices.productcatalogue.service.ProductService;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class ProductControllerTest {
     @Test
     public void shouldReturnAProduct() {
         long productId = 1;
-        Product product = DataFactory.getProduct(productId);
+        Product product = TestDataFactory.getProduct(productId);
 
         when(productService.findProductById(productId)).thenReturn(product);
 
@@ -39,7 +39,7 @@ public class ProductControllerTest {
     @Test
     public void shouldReturnTheProductsOfACategory() {
         long categoryId = 1;
-        List<Product> products = DataFactory.getProductList(5, categoryId);
+        List<Product> products = TestDataFactory.getProductList(5, categoryId);
 
         when(productService.findProductsByCategoryId(categoryId)).thenReturn(products);
         assertThat(productController.getProducts(categoryId)).isEqualTo(products);
