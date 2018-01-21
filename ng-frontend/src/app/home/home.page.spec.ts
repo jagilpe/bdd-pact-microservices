@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { ProductCategory } from '../domain/product-category';
 import { By } from '@angular/platform-browser';
 import * as _ from 'underscore';
+import { RouterTestingModule } from '@angular/router/testing';
 import createSpyObj = jasmine.createSpyObj;
 import Spy = jasmine.Spy;
 
@@ -26,6 +27,9 @@ describe('HomePage', () => {
       ],
       providers: [
         { provide: PRODUCT_CATEGORY_REPOSITORY, useFactory: () => createSpyObj('ProductRepository', ['findAll']) }
+      ],
+      imports: [
+        RouterTestingModule
       ]
     }).compileComponents();
 

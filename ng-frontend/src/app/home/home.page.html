@@ -3,6 +3,13 @@
     Welcome to {{ title }}!
   </h1>
 </div>
-<div id="category-list">
-  <div class="category" *ngFor="let category of categories">{{ category.name }}</div>
+<div id="category-list" class="row">
+  <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let category of categories">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="category card-title">{{ category.name }}</h5>
+        <a class="btn btn-dark" routerLink="/category/{{ category.id }}">View products</a>
+      </div>
+    </div>
+  </div>
 </div>

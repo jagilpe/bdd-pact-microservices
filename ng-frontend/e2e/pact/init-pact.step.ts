@@ -13,7 +13,7 @@ defineSupportCode(({ AfterAll, BeforeAll, After }) => {
     spec: 2,
     port: API_BACKEND_PORT,
     cors: true,
-    dir: path.resolve(__dirname, '../../pacts')
+    dir: path.resolve(__dirname, '../../build/pacts')
   });
 
   BeforeAll((callback) => {

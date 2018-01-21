@@ -13,7 +13,7 @@ services:
     environment:
       - PRODUCTS_CATALOGUE_SERVICE_URL=http://product-catalog-service:8080
       - OFFERS_SERVICE_URL=http://offers-service:8080
-      - NG_FRONTEND_URL=http://ng-frontend
+      - NG_FRONTEND_URL=http://localhost:4200
     ports:
       - 8080:8080
     networks:

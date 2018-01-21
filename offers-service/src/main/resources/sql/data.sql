@@ -5,4 +5,14 @@ INSERT INTO offer (product_id, shop_id, shop_name, price) VALUES
   (1, 4, 'Example shop 4', 685),
   (2, 2, 'Example shop 2', 100),
   (2, 3, 'Example shop 3', 125),
-  (2, 4, 'Example shop 4', 95);
+  (3, 4, 'Example shop 4', 95),
+  (4, 2, 'Example shop 2', 100),
+  (6, 3, 'Example shop 3', 125),
+  (7, 4, 'Example shop 4', 95),
+  (8, 2, 'Example shop 2', 100),
+  (9, 3, 'Example shop 3', 125),
+  (10, 4, 'Example shop 4', 95),
+  (11, 4, 'Example shop 4', 95),
+  (12, 2, 'Example shop 2', 100),
+  (13, 3, 'Example shop 3', 125),
+  (14, 4, 'Example shop 4', 95);
