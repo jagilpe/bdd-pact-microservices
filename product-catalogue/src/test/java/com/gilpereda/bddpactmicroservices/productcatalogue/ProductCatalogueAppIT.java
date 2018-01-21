@@ -40,4 +40,9 @@ public class ProductCatalogueAppIT {
     public void setUpStateThereIsAProductIPhone8() throws Exception {
         dataFixtureLoader.setUpFixture(TestCase.ONE_PRODUCT);
     }
+
+    @State("there are 6 categories")
+    public void setUpStateThereAre6Categories() throws Exception {
+        dataFixtureLoader.setUpFixture(TestCase.SIX_CATEGORIES);
+    }
 }

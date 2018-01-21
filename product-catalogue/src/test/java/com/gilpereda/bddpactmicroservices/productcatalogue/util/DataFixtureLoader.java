@@ -1,8 +1,8 @@
 package com.gilpereda.bddpactmicroservices.productcatalogue.util;
 
 import com.gilpereda.bddpactmicroservices.productcatalogue.model.Category;
+import com.gilpereda.bddpactmicroservices.productcatalogue.model.DataFactory;
 import com.gilpereda.bddpactmicroservices.productcatalogue.model.Product;
-import com.gilpereda.bddpactmicroservices.productcatalogue.model.ProductFactory;
 import org.dbunit.DataSourceDatabaseTester;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.dataset.Column;
@@ -28,6 +28,7 @@ public class DataFixtureLoader {
     public void setUpFixture(final TestCase testCase) throws Exception {
         DefaultDataSet dataSet = new DefaultDataSet();
         long categoryId;
+        Category category;
         final DefaultTable productTable = new DefaultTable("product",
             new Column[] {
                 new Column("id", DataType.BIGINT),
@@ -43,24 +44,30 @@ public class DataFixtureLoader {
         switch (testCase) {
             case ONE_PRODUCT:
                 long productId = 1;
-                Product product = ProductFactory.getProduct(productId);
-                categoryId = product.getCategory().getId();
-                productTable.addRow(new Object[] { product.getId(), product.getName(), product.getManufacturer(), categoryId });
-                dataSet.addTable(productTable);
+                Product product = DataFactory.getProduct(productId);
+                category = product.getCategory();
+                categoryId = category.getId();
+                categoryTable.addRow(new Object[] { categoryId, category.getName() });
+                productTable.addRow(new Object[]{ product.getId(), product.getName(), product.getManufacturer(), categoryId });
                 break;
             case FIVE_PRODUCTS_IN_CATEGORY_1:
                 categoryId = 1;
-                Category category = ProductFactory.getCategory(categoryId);
-                List<Product> products = ProductFactory.getProductList(5, category);
+                category = DataFactory.getCategory(categoryId);
+                List<Product> products = DataFactory.getProductList(5, category);
                 categoryTable.addRow(new Object[] { category.getId(), category.getName() });
                 for (Product p : products) {
                     productTable.addRow(new Object[]{ p.getId(), p.getName(), p.getManufacturer(), categoryId });
                 }
-                dataSet.addTable(categoryTable);
-                dataSet.addTable(productTable);
+                break;
+            case SIX_CATEGORIES:
+                for(Category cat: DataFactory.getCategories(6)) {
+                    categoryTable.addRow(new Object[] { cat.getId(), cat.getName()});
+                }
                 break;
         }
 
+        dataSet.addTable(categoryTable);
+        dataSet.addTable(productTable);
         getDatabaseTester().setDataSet(dataSet);
         getDatabaseTester().onSetup();
     }

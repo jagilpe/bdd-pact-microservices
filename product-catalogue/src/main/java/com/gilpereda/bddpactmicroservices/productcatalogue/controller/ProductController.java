@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired
@@ -16,7 +17,7 @@ public class ProductController {
         return productService.findProductById(productId);
     }
 
-    @RequestMapping(path = "/", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public Iterable<Product> getProducts(@RequestParam("category") final long categoryId) {
         return productService.findProductsByCategoryId(categoryId);
     }
