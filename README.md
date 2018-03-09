@@ -3,6 +3,8 @@
 This project is an example of how to apply BDD to the development of an application based on microservices using Consumer
 Driven Contract Testing.
 
+You can get more detail about it in [BDD in a Microservices Environment using Consumer Driven Contract Testing](https://javier.gilpereda.com/microservices/bdd-microservices-environment-using-consumer-driven-contract-testing-1)
+
 ## Project description
 
 The application allows us to browse a product catalogue and to get the details and available offers for 
