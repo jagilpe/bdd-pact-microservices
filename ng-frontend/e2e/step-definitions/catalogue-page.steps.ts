@@ -17,9 +17,7 @@ defineSupportCode(({ When, Then }) => {
     return categoryPage.navigateTo();
   });
 
-  Then('I should get {int} items in the products list', (count: number) => {
-    return expect(categoryPage.getProductsCount()).to.eventually.equal(count)
-      .then(() => apiBackend.verify());
-  });
+  Then('I should get {int} items in the products list', (count: number) =>
+    expect(categoryPage.getProductsCount()).to.eventually.equal(count));
 
 });

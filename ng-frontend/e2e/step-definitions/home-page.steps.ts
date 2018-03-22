@@ -15,9 +15,7 @@ defineSupportCode(({ Given, Then }) => {
     expect(HomePO.getWelcomeMessage()).to.eventually.equal(welcomeMessage)
   );
 
-  Then('I should see {int} items in the category list', (categoriesCount) => {
-    return expect(HomePO.getCategoriesCount()).to.eventually.equal(categoriesCount)
-      .then(() => apiBackend.verify());
-  });
+  Then('I should see {int} items in the category list', (categoriesCount) =>
+    expect(HomePO.getCategoriesCount()).to.eventually.equal(categoriesCount));
 
 });

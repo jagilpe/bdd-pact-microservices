@@ -70,12 +70,10 @@ defineSupportCode(({ Given, When, Then }) => {
     return productOffersPage.navigateTo();
   });
 
-  Then('I get the {string} product details', (productName: string) => {
-    return expect(productOffersPage.getProductDetails()).to.eventually.deep.equal(products[productName]);
-  });
+  Then('I get the {string} product details', (productName: string) =>
+    expect(productOffersPage.getProductDetails()).to.eventually.deep.equal(products[productName]));
 
-  Then('I get {int} items in the list of offers', (offersCount: number) => {
-    return expect(productOffersPage.getOffersCount()).to.eventually.equal(offersCount);
-  });
+  Then('I get {int} items in the list of offers', (offersCount: number) =>
+    expect(productOffersPage.getOffersCount()).to.eventually.equal(offersCount));
 
 });
