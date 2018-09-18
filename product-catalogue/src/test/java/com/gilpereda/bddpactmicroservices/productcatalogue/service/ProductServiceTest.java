@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -36,8 +37,8 @@ public class ProductServiceTest {
         long productId = 1;
         Product product = TestDataFactory.getProduct(productId);
 
-        when(productRepository.findOne(productId)).thenReturn(product);
-        assertThat(productService.findProductById(productId)).isEqualTo(product);
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        assertThat(productService.findProductById(productId).orElse(null)).isEqualTo(product);
     }
 
     @Test
@@ -46,7 +47,7 @@ public class ProductServiceTest {
         Category category = TestDataFactory.getCategory(categoryId);
         List<Product> products = TestDataFactory.getProductList(5, category);
 
-        when(categoryRepository.findOne(categoryId)).thenReturn(category);
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
         when(productRepository.findAllByCategory(category)).thenReturn(products);
         assertThat(productService.findProductsByCategoryId(categoryId)).isEqualTo(products);
     }

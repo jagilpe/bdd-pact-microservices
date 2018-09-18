@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -31,7 +32,7 @@ public class ProductControllerTest {
         long productId = 1;
         Product product = TestDataFactory.getProduct(productId);
 
-        when(productService.findProductById(productId)).thenReturn(product);
+        when(productService.findProductById(productId)).thenReturn(Optional.of(product));
 
         assertThat(productController.getProductDetail(productId)).isEqualTo(product);
     }

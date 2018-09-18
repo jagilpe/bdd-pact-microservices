@@ -1,5 +1,8 @@
 package com.gilpereda.bddpactmicroservices.productcatalogue.service;
 
+import java.util.Collections;
+import java.util.Optional;
+
 import com.gilpereda.bddpactmicroservices.productcatalogue.model.Category;
 import com.gilpereda.bddpactmicroservices.productcatalogue.model.Product;
 import com.gilpereda.bddpactmicroservices.productcatalogue.persistence.CategoryRepository;
@@ -15,12 +18,13 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public Product findProductById(final long productId) {
-        return productRepository.findOne(productId);
+    public Optional<Product> findProductById(final long productId) {
+        return productRepository.findById(productId);
     }
 
     public Iterable<Product> findProductsByCategoryId(long categoryId) {
-        Category category = categoryRepository.findOne(categoryId);
-        return productRepository.findAllByCategory(category);
+        return categoryRepository.findById(categoryId)
+            .map(productRepository::findAllByCategory)
+            .orElse(Collections.emptyList());
     }
 }

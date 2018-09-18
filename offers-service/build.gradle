@@ -3,16 +3,20 @@ import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 
 buildscript {
     ext {
-        springBootVersion = '1.5.9.RELEASE'
+        springBootVersion = '2.0.5.RELEASE'
         jarName = "offers-service-${version}.jar"
     }
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('com.bmuschko:gradle-docker-plugin:3.2.1')
+        classpath('com.bmuschko:gradle-docker-plugin:3.6.1')
     }
+}
+
+plugins {
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
 }
 
 apply plugin: 'java'
@@ -25,7 +29,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -34,7 +38,7 @@ dependencies {
     compile("com.h2database:h2")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("au.com.dius:pact-jvm-provider-spring_2.12:3.5.10")
+    testCompile("au.com.dius:pact-jvm-provider-spring_2.12:3.5.21")
     testCompile("org.dbunit:dbunit:2.5.4")
 }
 
