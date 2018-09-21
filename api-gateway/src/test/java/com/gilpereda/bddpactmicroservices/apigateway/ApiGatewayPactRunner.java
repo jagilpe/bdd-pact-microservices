@@ -18,7 +18,8 @@ public class ApiGatewayPactRunner extends RestPactRunner {
 
     @NotNull
     @Override
-    protected InteractionRunner newInteractionRunner(final TestClass testClass, final Pact pact, final PactSource pactSource) {
+    protected InteractionRunner newInteractionRunner(
+        @NotNull final TestClass testClass, @NotNull final Pact pact, @NotNull final PactSource pactSource) {
         return new ApiGatewayInteractionRunner(testClass, pact, pactSource, initTestContextManager(testClass));
     }
 

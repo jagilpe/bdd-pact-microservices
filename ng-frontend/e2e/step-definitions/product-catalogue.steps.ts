@@ -39,7 +39,7 @@ defineSupportCode(({ Given }) => {
     const category = categoryIds["Smartphones"];
     return apiBackend.addInteraction({
       state: `there are ${categoriesCount} categories`,
-      uponReceiving: `A request a list of categories`,
+      uponReceiving: `A request for a list of categories`,
       withRequest: {
         method: 'GET',
         path: '/api/v1/categories'
