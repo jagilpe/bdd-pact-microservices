@@ -3,7 +3,11 @@
 This project is an example of how to apply BDD to the development of an application based on microservices using Consumer
 Driven Contract Testing.
 
-You can get more detail about it in [BDD in a Microservices Environment using Consumer Driven Contract Testing](https://javier.gilpereda.com/microservices/bdd-microservices-environment-using-consumer-driven-contract-testing-1)
+You can get more detail about it in the following articles:
+* [BDD in a Microservices Environment using Consumer Driven Contract Testing](https://javier.gilpereda.com/microservices/bdd-microservices-environment-using-consumer-driven-contract-testing-1)
+* [Generating a Consumer Contract from an Angular application using Pact-JS](https://javier.gilpereda.com/microservices/generating-consumer-contract-angular-application-using-pact-js-bdd-and-cdc)
+* [Rest API Gateway using Netflix Zuul and Pact Consumer Driven Contracts](https://javier.gilpereda.com/microservices/rest-api-gateway-using-netflix-zuul-and-pact-consumer-driven-contracts-bdd-and-cdc)
+* [Implementing a SpringBoot RestAPI using Pact Consumer Driven Contracts](https://javier.gilpereda.com/microservices/implementing-springboot-restapi-using-pact-consumer-driven-contracts-bdd-and-cdc)
 
 ## Project description
 
