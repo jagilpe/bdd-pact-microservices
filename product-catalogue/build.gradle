@@ -34,10 +34,17 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("com.h2database:h2")
+    compileOnly('org.projectlombok:lombok')
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("au.com.dius:pact-jvm-provider-spring_2.12:3.5.21")
+    testCompile("au.com.dius:pact-jvm-provider-spring_2.12:3.5.23")
     testCompile("org.dbunit:dbunit:2.5.4")
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
@@ -53,8 +60,8 @@ task createDockerfile(type: Dockerfile) {
     dependsOn copyFilesForDocker
     destFile project.file('build/docker/Dockerfile')
     from("alpine:edge")
-    maintainer('Javier Gil "javier@gilpereda.com"')
     runCommand('apk add --no-cache openjdk8')
+    label([maintainer: 'Javier Gil "javier@gilpereda.com"'])
     copyFile("files/${jarName}", "/opt/product-catalogue/lib/product-catalogue.jar")
     entryPoint('/usr/bin/java', '-jar', '-Dspring.profiles.active=demo', '-Dserver.port=8080', '/opt/product-catalogue/lib/product-catalogue.jar')
     exposePort 8080

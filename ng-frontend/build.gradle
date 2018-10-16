@@ -73,7 +73,7 @@ task createDockerfile(type: Dockerfile) {
     dependsOn ':checkDockerIsAvailable'
     destFile project.file('build/Dockerfile')
     from 'nginx:1.13.8-alpine'
-    maintainer "Javier Gil \"javier@gilpereda.com\""
+    label([maintainer: 'Javier Gil "javier@gilpereda.com"'])
     copyFile("nginx/default.conf", "/etc/nginx/conf.d/")
     runCommand("rm -rf /usr/share/nginx/html/*")
     copyFile("dist", "/usr/share/nginx/html")

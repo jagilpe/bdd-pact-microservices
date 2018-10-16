@@ -26,7 +26,7 @@ public class DataFixtureLoader {
 
     public void setUpFixture(final TestCase testCase) throws Exception {
         DefaultDataSet dataSet = new DefaultDataSet();
-        final DefaultTable productTable = new DefaultTable("product",
+        DefaultTable productTable = new DefaultTable("product",
             new Column[] {
                 new Column("id", DataType.BIGINT),
                 new Column("name", DataType.VARCHAR),

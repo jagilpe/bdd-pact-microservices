@@ -58,7 +58,7 @@ public class OfferServiceAppIT {
         return databaseTester;
     }
 
-    private IDataSet getDataset(final long productId, final int count) throws AmbiguousTableNameException {
+    private IDataSet getDataset(long productId, int count) throws AmbiguousTableNameException {
         final DefaultTable offerTable = new DefaultTable("offer",
             new Column[] {
                 new Column("id", DataType.BIGINT),

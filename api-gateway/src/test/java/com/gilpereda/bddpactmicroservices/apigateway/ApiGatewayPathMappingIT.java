@@ -17,10 +17,7 @@ import au.com.dius.pact.provider.junit.target.TestTarget;
 
 @RunWith(ApiGatewayPactRunner.class)
 @Provider("api-gateway")
-@SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = { ApiGateway.class, ApiGatewayPathMappingIT.ApiGatewayITConfig.class }
-)
+@SpringBootTest(classes = { ApiGateway.class, ApiGatewayPathMappingIT.ApiGatewayITConfig.class })
 @PactBroker(host = "localhost", port = "1080")
 @ActiveProfiles("test")
 public class ApiGatewayPathMappingIT {
