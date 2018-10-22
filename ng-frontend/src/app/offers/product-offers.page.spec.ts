@@ -79,7 +79,7 @@ describe('The Product Offers page', () => {
         expect(offerElems.length).toBe(productOffers.length);
         _.forEach(offerElems, (offerElem, index) => {
           const expectedOffer = productOffers[index];
-          expect(offerElem.query(By.css('.shop-name')).nativeElement.innerText).toBe(expectedOffer.shopName);
+          expect(offerElem.query(By.css('.shop-name')).nativeElement.innerText.trim()).toBe(expectedOffer.shopName);
           expect(offerElem.query(By.css('.price')).nativeElement.innerText).toEqual(expectedOffer.price.toString());
         });
 
